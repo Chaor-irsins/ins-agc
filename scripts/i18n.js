@@ -33,6 +33,8 @@ const translations = {
             carInsuranceDesc: '为汽车、摩托车、游艇等各类交通工具提供全方位保障。通过快速报价、多家保险公司对比和专业的理赔协助，确保您以最优惠的价格获得最全面的保障。',
             homeInsurance: '房屋保险',
             homeInsuranceDesc: '为自住房和出租房提供专业的财产保障方案，包括财产评估、保障方案设计、快速理赔和24小时专业咨询。',
+            ownerOccupied: '自住房',
+            rental: '出租房',
             whyTitle: '为什么选择我们',
             whyDesc: '我们以专业、诚信、高效为服务理念，通过深入了解客户需求，提供个性化的保险方案。无论您是个人客户还是企业客户，我们都能为您提供专业、贴心的服务，成为您最值得信赖的保险合作伙伴。',
             yearsExp: '年行业经验',
@@ -65,7 +67,7 @@ const translations = {
                     '理赔协助'
                 ],
                 home: [
-                    '自住房，出租房',
+                    'Homeowner & Rental Properties',
                     '全面保障方案',
                     '快速理赔服务',
                     '24小时专业咨询'
@@ -148,6 +150,8 @@ const translations = {
             carInsuranceDesc: 'We provide comprehensive coverage for automobiles, motorcycles, boats, and other vehicles. Through quick quotes, multi-insurer comparisons, and professional claims assistance, we ensure you get the most comprehensive coverage at the best price.',
             homeInsurance: 'Home Insurance',
             homeInsuranceDesc: 'We provide professional property protection plans for owner-occupied and rental properties, including property assessment, coverage plan design, fast claims processing, and 24/7 professional consultation.',
+            ownerOccupied: 'Homeowner',
+            rental: 'Rental',
             whyTitle: 'Why Choose Us',
             whyDesc: 'We adhere to the service principles of professionalism, integrity, and efficiency. By deeply understanding customer needs, we provide personalized insurance solutions. Whether you are an individual or business client, we can provide professional and attentive service, becoming your most trusted insurance partner.',
             yearsExp: 'Years of Experience',
@@ -319,8 +323,13 @@ function updateAboutSection(t) {
         aboutTexts[0].textContent = t.about.intro;
     }
     
-    const servicesTitle = document.querySelector('#about .about-text h3:nth-child(2)');
-    if (servicesTitle) servicesTitle.textContent = t.about.servicesTitle;
+    // 更新"我们的服务范围"标题 - 查找所有h3，找到包含"服务范围"的那个
+    const allH3 = document.querySelectorAll('#about .about-text h3');
+    allH3.forEach(h3 => {
+        if (h3.textContent.includes('服务范围') || h3.textContent.includes('Services')) {
+            h3.textContent = t.about.servicesTitle;
+        }
+    });
     
     // 更新服务范围描述
     const serviceDescriptions = document.querySelectorAll('#about .about-text p strong');
@@ -337,8 +346,12 @@ function updateAboutSection(t) {
         serviceParas[3].innerHTML = '<strong>' + t.about.homeInsurance + ' - </strong>' + t.about.homeInsuranceDesc;
     }
     
-    const whyTitle = document.querySelector('#about .about-text h3:last-child');
-    if (whyTitle) whyTitle.textContent = t.about.whyTitle;
+    // 更新"为什么选择我们"标题 - 使用之前获取的allH3
+    allH3.forEach(h3 => {
+        if (h3.textContent.includes('为什么') || h3.textContent.includes('Why')) {
+            h3.textContent = t.about.whyTitle;
+        }
+    });
     
     const whyDesc = document.querySelector('#about .about-text p:last-child');
     if (whyDesc && !whyDesc.querySelector('strong')) {

@@ -262,10 +262,29 @@ if (contactForm) {
         // 收集表单数据并准备Google Forms格式
         const serviceSelect = document.getElementById('service');
         let serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
-        // 如果没有选择或文本为空，使用当前语言的默认值
-        if (!serviceText || serviceText.trim() === '' || serviceText === serviceSelect.options[0].text) {
-            const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
-            serviceText = t.contact.form.serviceOther;
+        const selectedValue = serviceSelect.value;
+        
+        // Google表单的选项是中文，需要将英文选项映射回中文
+        const serviceMapping = {
+            'car': '汽车保险',
+            'property': '房屋保险',
+            'business': '商业保险',
+            'other': '其他',
+            // 英文文本映射
+            'Auto Insurance': '汽车保险',
+            'Home Insurance': '房屋保险',
+            'Commercial Insurance': '商业保险',
+            'Other': '其他'
+        };
+        
+        // 如果有对应的映射，使用映射值；否则使用原值
+        if (serviceMapping[selectedValue]) {
+            serviceText = serviceMapping[selectedValue];
+        } else if (serviceMapping[serviceText]) {
+            serviceText = serviceMapping[serviceText];
+        } else if (!serviceText || serviceText.trim() === '' || serviceText === serviceSelect.options[0].text) {
+            // 如果没有选择或文本为空，使用中文默认值（因为Google表单是中文）
+            serviceText = '其他';
         }
         
         // 获取当前语言的默认值

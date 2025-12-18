@@ -494,16 +494,32 @@ function updateLanguageButtons() {
 }
 
 // 初始化语言
-document.addEventListener('DOMContentLoaded', () => {
+function initLanguage() {
     updatePageLanguage();
     updateLanguageButtons();
     
-    // 语言切换按钮事件
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const lang = btn.getAttribute('data-lang');
-            switchLanguage(lang);
+    // 语言切换按钮事件 - 使用事件委托
+    const languageSwitcher = document.querySelector('.language-switcher');
+    if (languageSwitcher) {
+        languageSwitcher.addEventListener('click', (e) => {
+            const btn = e.target.closest('.lang-btn');
+            if (btn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const lang = btn.getAttribute('data-lang');
+                if (lang && lang !== currentLang) {
+                    switchLanguage(lang);
+                }
+            }
         });
-    });
-});
+    }
+}
+
+// DOMContentLoaded时初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguage);
+} else {
+    // DOM已经加载完成，立即执行
+    initLanguage();
+}
 

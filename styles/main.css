@@ -741,6 +741,14 @@ section {
 
 .service-features {
     list-style: none;
+    display: block;
+}
+
+/* 商业保险的特性列表 - 两列布局 */
+.service-card-featured .service-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 1.5rem;
 }
 
 .service-features li {
@@ -748,6 +756,13 @@ section {
     padding-left: 1.5rem;
     position: relative;
     color: var(--text-light);
+}
+
+/* 移动端单列显示 */
+@media (max-width: 768px) {
+    .service-card-featured .service-features {
+        grid-template-columns: 1fr;
+    }
 }
 
 .service-features li::before {

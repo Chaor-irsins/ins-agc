@@ -245,13 +245,14 @@ if (contactForm) {
         params.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
         
         try {
-            // 使用隐藏的iframe提交到Google Forms（避免401错误）
-            const formUrl = GOOGLE_FORM_URL + '?' + params.toString();
+            // 使用隐藏的iframe提交到Google Forms（避免403错误）
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.style.width = '0';
             iframe.style.height = '0';
             iframe.style.border = 'none';
+            iframe.style.position = 'absolute';
+            iframe.style.left = '-9999px';
             iframe.name = 'hidden_iframe_' + Date.now();
             document.body.appendChild(iframe);
             
@@ -261,6 +262,7 @@ if (contactForm) {
             hiddenForm.action = GOOGLE_FORM_URL;
             hiddenForm.target = iframe.name;
             hiddenForm.style.display = 'none';
+            hiddenForm.acceptCharset = 'UTF-8';
             
             // 添加所有字段
             Object.keys(GOOGLE_FORM_ENTRIES).forEach(key => {
@@ -282,16 +284,23 @@ if (contactForm) {
             });
             
             document.body.appendChild(hiddenForm);
+            
+            // 等待iframe加载完成后再提交
+            iframe.onload = () => {
+                setTimeout(() => {
+                    try {
+                        document.body.removeChild(hiddenForm);
+                        document.body.removeChild(iframe);
+                    } catch(e) {
+                        // 忽略清理错误
+                    }
+                }, 2000);
+            };
+            
             hiddenForm.submit();
             
             // 等待提交完成
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // 清理
-            setTimeout(() => {
-                document.body.removeChild(hiddenForm);
-                document.body.removeChild(iframe);
-            }, 2000);
+            await new Promise(resolve => setTimeout(resolve, 1500));
             
             // 提交成功
             lastSubmitTime = Date.now();
@@ -370,6 +379,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     }
+    
+    // 抑制浏览器扩展的错误（如Grammarly等）
+    window.addEventListener('error', (e) => {
+        if (e.message && (
+            e.message.includes('No tab with id') ||
+            e.message.includes('Grammarly') ||
+            e.message.includes('grm ERROR')
+        )) {
+            e.preventDefault();
+            return false;
+        }
+    }, true);
     
     console.log('Insurance Agency网站已加载完成');
 });

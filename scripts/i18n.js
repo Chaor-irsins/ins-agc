@@ -171,7 +171,7 @@ const translations = {
             homeInsuranceDesc: 'Protect your property assets with comprehensive coverage solutions.',
             features: {
                 business: [
-                    'Food Service (delivery, bubble tea, buffet, BBQ, etc.)',
+                    'Food Service (To-go, bubble tea, buffet, BBQ, etc.)',
                     'Retail (supermarkets, nail salons, accessories, etc.)',
                     'Professional Services (accounting, real estate, legal, etc.)',
                     'Logistics (trucks, warehouses, etc.)',

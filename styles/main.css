@@ -116,20 +116,23 @@ body {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    margin-left: 1rem;
+    margin-left: 1.5rem;
 }
 
 .lang-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: 2px solid var(--primary-color);
     background-color: transparent;
     color: var(--primary-color);
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 600;
     transition: var(--transition);
     font-family: inherit;
+    min-width: 50px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .lang-btn:hover {
@@ -140,8 +143,6 @@ body {
 .lang-btn.active {
     background-color: var(--primary-color);
     color: white;
-}
-    padding: 0;
 }
 
 .nav-link {
@@ -488,7 +489,20 @@ section {
 
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
+}
+
+#services .section-header {
+    margin-bottom: 0.75rem;
+}
+
+#services .section-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+#services .section-subtitle {
+    font-size: 1rem;
 }
 
 .section-title {
@@ -683,10 +697,15 @@ section {
 }
 
 /* ===== Services Section ===== */
+.services {
+    padding-bottom: 4rem;
+}
+
 .services-grid {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 1rem;
+    padding-bottom: 4rem;
 }
 
 /* 商业保险 - 单独占一排 */
@@ -702,6 +721,8 @@ section {
     gap: 2.5rem;
     max-width: 1000px;
     margin: 0 auto;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -714,12 +735,14 @@ section {
 .service-card {
     background-color: var(--bg-white);
     padding: 1.5rem;
+    padding-bottom: 2.5rem;
     border-radius: 16px;
     box-shadow: var(--shadow-md);
     transition: var(--transition-slow);
     border: 2px solid var(--border-color);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    margin-bottom: 0;
 }
 
 .service-card::before {
@@ -1015,6 +1038,20 @@ section {
 
     .nav-menu.active {
         left: 0;
+    }
+
+    .language-switcher {
+        position: fixed;
+        right: 20px;
+        top: 80px;
+        z-index: 1001;
+        margin-left: 0;
+    }
+    
+    .lang-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        min-width: 45px;
     }
 
     .nav-toggle {

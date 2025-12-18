@@ -236,26 +236,30 @@ if (contactForm) {
         const serviceSelect = document.getElementById('service');
         const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text || '其他';
         
-        // 准备Google Forms数据（使用FormData格式）
-        const formData = new FormData();
-        formData.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
-        formData.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
-        formData.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || '未填写');
-        formData.append(GOOGLE_FORM_ENTRIES.service, serviceText);
-        formData.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
+        // 准备Google Forms数据（使用URL编码格式，避免401错误）
+        const params = new URLSearchParams();
+        params.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
+        params.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
+        params.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || '未填写');
+        params.append(GOOGLE_FORM_ENTRIES.service, serviceText);
+        params.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
         
         try {
             // 提交到Google Forms
-            // 注意：使用no-cors模式，因为Google Forms不允许跨域CORS
+            // 使用URL编码方式提交，避免401错误
             const response = await fetch(GOOGLE_FORM_URL, {
                 method: 'POST',
                 mode: 'no-cors',  // Google Forms需要no-cors模式
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
             });
             
             // 由于使用no-cors模式，无法检查response状态
             // 但提交应该已经成功（Google Forms会自动处理）
-            // 如果提交失败，通常是因为Entry ID不正确
+            // 等待一小段时间确保提交完成
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             // 提交成功（假设成功，因为no-cors无法检查状态）
             lastSubmitTime = Date.now();

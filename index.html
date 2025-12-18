@@ -27,7 +27,6 @@
             </button>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link">首页</a></li>
-                <li><a href="#core-services" class="nav-link">核心服务</a></li>
                 <li><a href="#about" class="nav-link">关于我们</a></li>
                 <li><a href="#services" class="nav-link">服务介绍</a></li>
                 <li><a href="#contact" class="nav-link">联系方式</a></li>
@@ -62,36 +61,6 @@
         </div>
     </section>
 
-    <!-- Core Services Highlights Section -->
-    <section id="core-services" class="core-services">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">核心服务</h2>
-                <p class="section-subtitle">专业保障，值得信赖</p>
-            </div>
-            <div class="core-services-grid">
-                <div class="core-service-card">
-                    <div class="core-service-icon">🚗</div>
-                    <h3>车险服务</h3>
-                    <p>为您的爱车提供全方位保障，快速报价，便捷投保</p>
-                    <a href="#services" class="core-service-link">了解更多 →</a>
-                </div>
-                <div class="core-service-card">
-                    <div class="core-service-icon">🏠</div>
-                    <h3>房屋保险</h3>
-                    <p>保护您的财产安全，专业评估，全面保障</p>
-                    <a href="#services" class="core-service-link">了解更多 →</a>
-                </div>
-                <div class="core-service-card">
-                    <div class="core-service-icon">🏢</div>
-                    <h3>商业保险</h3>
-                    <p>为企业提供定制化保险方案，助力稳健发展</p>
-                    <a href="#services" class="core-service-link">了解更多 →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
@@ -102,8 +71,17 @@
             <div class="about-content">
                 <div class="about-text">
                     <h3>关于我们</h3>
-                    <p>我们是一家专业的保险代理机构，致力于为客户提供最专业、最可靠的保险代理服务。凭借多年的行业经验和专业的团队，我们专注于车险、房屋险和商业保险领域，帮助客户找到最适合的保险解决方案。</p>
-                    <p>我们以专业、诚信、高效为服务理念，致力于成为客户最值得信赖的保险合作伙伴。通过深入了解客户需求，我们提供个性化的保险方案，确保每一位客户都能获得最适合的保障。</p>
+                    <p>我们是一家专业的保险代理机构，致力于为客户提供最专业、最可靠的保险代理服务。凭借多年的行业经验和专业的团队，我们专注于商业保险、汽车保险和房屋保险领域，帮助客户找到最适合的保险解决方案。</p>
+                    
+                    <h3>我们的服务范围</h3>
+                    <p><strong>商业保险</strong> - 为各类企业提供全面的商业保险解决方案，涵盖餐饮、零售、服务、物流、建筑等多个行业。我们深入了解不同行业的风险特点，为企业量身定制最合适的保障方案。</p>
+                    
+                    <p><strong>汽车保险</strong> - 为汽车、摩托车、游艇等各类交通工具提供全方位保障。通过快速报价、多家保险公司对比和专业的理赔协助，确保您以最优惠的价格获得最全面的保障。</p>
+                    
+                    <p><strong>房屋保险</strong> - 为自住房和出租房提供专业的财产保障方案，包括财产评估、保障方案设计、快速理赔和24小时专业咨询。</p>
+                    
+                    <h3>为什么选择我们</h3>
+                    <p>我们以专业、诚信、高效为服务理念，通过深入了解客户需求，提供个性化的保险方案。无论您是个人客户还是企业客户，我们都能为您提供专业、贴心的服务，成为您最值得信赖的保险合作伙伴。</p>
                 </div>
                 <div class="about-stats">
                     <div class="stat-item">
@@ -131,29 +109,8 @@
                 <p class="section-subtitle">全方位的保险解决方案</p>
             </div>
             <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🚗</div>
-                    <h3>车险服务</h3>
-                    <p>提供全面的汽车，摩托车，游艇等提供全方位保障。</p>
-                    <ul class="service-features">
-                        <li>快速报价</li>
-                        <li>多家保险公司对比</li>
-                        <li>在线投保</li>
-                        <li>理赔协助</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🏠</div>
-                    <h3>房屋保险</h3>
-                    <p>保护您的财产安全，为您的资产提供全方位保障。</p>
-                    <ul class="service-features">
-                        <li>自住房，出租房</li>
-                        <li>全面保障方案</li>
-                        <li>快速理赔服务</li>
-                        <li>24小时专业咨询</li>
-                    </ul>
-                </div>
-                <div class="service-card">
+                <!-- 商业保险 - 单独占一排 -->
+                <div class="service-card service-card-featured">
                     <div class="service-icon">🏢</div>
                     <h3>商业保险</h3>
                     <p>为企业提供全面的保险解决方案，包括商业责任险、员工保险等，助力企业稳健发展。</p>
@@ -161,7 +118,34 @@
                         <li>餐饮业（外卖店，奶茶店，自助，烧烤等各类）</li>
                         <li>零售业（超市，美甲店，饰品等）</li>
                         <li>服务业（会计，房产，律师等）</li>
+                        <li>物流业（卡车，仓库等）</li>
+                        <li>建筑业（购物中心，公寓，办公楼，装修责任险，施工风险险等）</li>
                     </ul>
+                </div>
+                <!-- 汽车保险和房屋保险 - 品字形布局容器 -->
+                <div class="services-row">
+                    <div class="service-card">
+                        <div class="service-icon">🚗</div>
+                        <h3>汽车保险</h3>
+                        <p>提供全面的汽车，摩托车，游艇等提供全方位保障。</p>
+                        <ul class="service-features">
+                            <li>快速报价</li>
+                            <li>多家保险公司对比</li>
+                            <li>在线投保</li>
+                            <li>理赔协助</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🏠</div>
+                        <h3>房屋保险</h3>
+                        <p>保护您的财产安全，为您的资产提供全方位保障。</p>
+                        <ul class="service-features">
+                            <li>自住房，出租房</li>
+                            <li>全面保障方案</li>
+                            <li>快速理赔服务</li>
+                            <li>24小时专业咨询</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -226,7 +210,7 @@
                             <label for="service">咨询类型</label>
                             <select id="service" name="service">
                                 <option value="">请选择</option>
-                                <option value="car">车险服务</option>
+                                <option value="car">汽车保险</option>
                                 <option value="property">房屋保险</option>
                                 <option value="business">商业保险</option>
                                 <option value="other">其他</option>
@@ -259,7 +243,6 @@
                     <h4>快速链接</h4>
                     <ul>
                         <li><a href="#home">首页</a></li>
-                        <li><a href="#core-services">核心服务</a></li>
                         <li><a href="#about">关于我们</a></li>
                         <li><a href="#services">服务介绍</a></li>
                         <li><a href="#contact">联系方式</a></li>
@@ -268,9 +251,9 @@
                 <div class="footer-section">
                     <h4>服务项目</h4>
                     <ul>
-                        <li><a href="#services">车险服务</a></li>
-                        <li><a href="#services">房屋保险</a></li>
                         <li><a href="#services">商业保险</a></li>
+                        <li><a href="#services">汽车保险</a></li>
+                        <li><a href="#services">房屋保险</a></li>
                     </ul>
                 </div>
             </div>

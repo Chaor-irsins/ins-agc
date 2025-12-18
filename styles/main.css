@@ -652,14 +652,30 @@ section {
 
 /* ===== Services Section ===== */
 .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 2.5rem;
 }
 
-@media (max-width: 992px) {
-    .services-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* 商业保险 - 单独占一排 */
+.service-card-featured {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* 汽车保险和房屋保险 - 品字形布局容器 */
+.services-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .services-row {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 }
 
@@ -824,6 +840,33 @@ section {
     color: #065f46;
     border-radius: 6px;
     text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-success p {
+    margin: 0;
+}
+
+.form-success p[style*="color: #ef4444"] {
+    color: #ef4444 !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 提交按钮禁用状态 */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    pointer-events: none;
 }
 
 /* ===== Footer ===== */

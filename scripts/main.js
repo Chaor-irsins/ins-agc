@@ -130,10 +130,43 @@ messageInput.addEventListener('blur', () => {
     }
 });
 
-// 表单提交
+// ===== 表单提交（集成Google Forms - 完全免费） =====
+// 配置说明：
+// 1. 创建Google Form：访问 https://forms.google.com
+// 2. 获取表单URL：点击"发送" → "链接"，复制URL
+// 3. 获取Entry ID：在表单编辑页面按F12，查找每个字段的 name="entry.XXXXXXXXX"
+// 4. 替换下面的URL和Entry ID
+
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfyyvpXGTPcmaTpk3Wwmib6GLrw26Q2C_-I5j0aL4DdiqBzMQ/formResponse';
+const GOOGLE_FORM_ENTRIES = {
+    name: 'entry.399725318',      // 姓名字段的Entry ID
+    email: 'entry.1504004171',    // 邮箱字段的Entry ID
+    phone: 'entry.1384423353',    // 电话字段的Entry ID
+    service: 'entry.1118686692',  // 咨询类型字段的Entry ID
+    message: 'entry.2064625578'   // 留言字段的Entry ID
+};
+
+// 备用方案：Formspree（如果不想用Google Forms）
+// const FORMSPREEE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+// 防重复提交：记录上次提交时间
+let lastSubmitTime = 0;
+const SUBMIT_COOLDOWN = 30000; // 30秒内不能重复提交（毫秒）
+
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton ? submitButton.textContent : '提交咨询';
+    
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // 检查是否在冷却期内
+        const now = Date.now();
+        if (now - lastSubmitTime < SUBMIT_COOLDOWN) {
+            const remainingTime = Math.ceil((SUBMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
+            alert(`请稍候再试，距离上次提交还需等待 ${remainingTime} 秒`);
+            return;
+        }
         
         // 清除之前的错误信息
         nameError.textContent = '';
@@ -182,77 +215,88 @@ if (contactForm) {
             messageInput.style.borderColor = '';
         }
         
-        if (!hasError) {
-            // 收集表单数据
-            const formData = {
-                name: nameInput.value,
-                email: emailInput.value,
-                phone: phoneInput.value || '未填写',
-                service: document.getElementById('service').value || '未选择',
-                message: messageInput.value,
-                timestamp: new Date().toLocaleString('zh-CN')
-            };
-            
-            // 在控制台输出表单数据（用于测试）
-            console.log('表单提交数据：', formData);
-            
-            // 方案1: 使用Google Forms（推荐用于Google Sites）
-            // 需要创建一个Google Form，然后使用以下代码：
-            /*
-            const googleFormUrl = 'YOUR_GOOGLE_FORM_URL';
-            const formDataToSend = new FormData();
-            formDataToSend.append('entry.XXXXXXX', formData.name);  // 替换为实际的entry ID
-            formDataToSend.append('entry.XXXXXXX', formData.email);
-            formDataToSend.append('entry.XXXXXXX', formData.phone);
-            formDataToSend.append('entry.XXXXXXX', formData.service);
-            formDataToSend.append('entry.XXXXXXX', formData.message);
-            
-            fetch(googleFormUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formDataToSend
-            });
-            */
-            
-            // 方案2: 使用第三方表单服务（如Formspree）
-            /*
-            fetch('https://formspree.io/f/YOUR_FORM_ID', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('表单提交成功');
-                }
-            })
-            .catch(error => {
-                console.error('表单提交失败:', error);
-            });
-            */
-            
-            // 方案3: 发送邮件（需要后端支持）
-            // 可以使用mailto链接（简单但不推荐）
-            // window.location.href = `mailto:support@irs-ins.com?subject=咨询：${formData.service}&body=姓名：${formData.name}%0A邮箱：${formData.email}%0A电话：${formData.phone}%0A留言：${formData.message}`;
-            
-            // 显示成功消息
-            formSuccess.style.display = 'block';
-            contactForm.reset();
-            
-            // 3秒后隐藏成功消息
-            setTimeout(() => {
-                formSuccess.style.display = 'none';
-            }, 5000);
-            
-            // 滚动到成功消息
-            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else {
+        if (hasError) {
             // 滚动到第一个错误字段
             const firstError = document.querySelector('.error-message:not(:empty)');
             if (firstError) {
                 firstError.closest('.form-group').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            return;
+        }
+        
+        // 防重复提交：禁用按钮
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = '提交中...';
+            submitButton.style.opacity = '0.6';
+            submitButton.style.cursor = 'not-allowed';
+        }
+        
+        // 收集表单数据并准备Google Forms格式
+        const serviceSelect = document.getElementById('service');
+        const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text || '其他';
+        
+        // 准备Google Forms数据（使用FormData格式）
+        const formData = new FormData();
+        formData.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
+        formData.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
+        formData.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || '未填写');
+        formData.append(GOOGLE_FORM_ENTRIES.service, serviceText);
+        formData.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
+        
+        try {
+            // 提交到Google Forms
+            // 注意：使用no-cors模式，因为Google Forms不允许跨域CORS
+            const response = await fetch(GOOGLE_FORM_URL, {
+                method: 'POST',
+                mode: 'no-cors',  // Google Forms需要no-cors模式
+                body: formData
+            });
+            
+            // 由于使用no-cors模式，无法检查response状态
+            // 但提交应该已经成功（Google Forms会自动处理）
+            // 如果提交失败，通常是因为Entry ID不正确
+            
+            // 提交成功（假设成功，因为no-cors无法检查状态）
+            lastSubmitTime = Date.now();
+            
+            // 显示成功消息
+            formSuccess.style.display = 'block';
+            formSuccess.innerHTML = '<p>✓ 感谢您的咨询！我们会尽快与您联系。</p>';
+            
+            // 重置表单
+            contactForm.reset();
+            
+            // 滚动到成功消息
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // 5秒后隐藏成功消息
+            setTimeout(() => {
+                formSuccess.style.display = 'none';
+            }, 5000);
+            
+            console.log('表单提交成功（已发送到Google Forms）');
+        } catch (error) {
+            // 网络错误或其他错误
+            console.error('表单提交失败:', error);
+            
+            // 显示错误消息
+            formSuccess.style.display = 'block';
+            formSuccess.innerHTML = '<p style="color: #ef4444;">✗ 提交失败，请检查网络连接后重试。如果问题持续，请直接致电联系我们。</p>';
+            
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // 3秒后隐藏错误消息
+            setTimeout(() => {
+                formSuccess.style.display = 'none';
+            }, 5000);
+        } finally {
+            // 恢复按钮状态
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+                submitButton.style.opacity = '1';
+                submitButton.style.cursor = 'pointer';
             }
         }
     });

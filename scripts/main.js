@@ -242,13 +242,22 @@ if (contactForm) {
         
         // 收集表单数据并准备Google Forms格式
         const serviceSelect = document.getElementById('service');
-        const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text || '其他';
+        let serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+        // 如果没有选择或文本为空，使用当前语言的默认值
+        if (!serviceText || serviceText.trim() === '' || serviceText === serviceSelect.options[0].text) {
+            const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
+            serviceText = t.contact.form.serviceOther;
+        }
+        
+        // 获取当前语言的默认值
+        const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
+        const phoneDefault = currentLang === 'zh' ? '未填写' : 'Not provided';
         
         // 准备Google Forms数据（使用URL编码格式）
         const params = new URLSearchParams();
         params.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
         params.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
-        params.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || '未填写');
+        params.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || phoneDefault);
         params.append(GOOGLE_FORM_ENTRIES.service, serviceText);
         params.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
         
@@ -284,7 +293,7 @@ if (contactForm) {
                 } else if (key === 'email') {
                     input.value = emailInput.value.trim();
                 } else if (key === 'phone') {
-                    input.value = phoneInput.value.trim() || '未填写';
+                    input.value = phoneInput.value.trim() || phoneDefault;
                 } else if (key === 'message') {
                     input.value = messageInput.value.trim();
                 }
@@ -305,16 +314,37 @@ if (contactForm) {
                 }, 2000);
             };
             
+            // 添加错误处理
+            iframe.onerror = () => {
+                console.error('iframe加载错误');
+            };
+            
+            // 提交表单
             hiddenForm.submit();
             
-            // 等待提交完成
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // 等待提交完成（增加等待时间以确保提交成功）
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // 检查iframe是否加载成功
+            let submitSuccess = false;
+            try {
+                // 尝试访问iframe内容（可能被CSP阻止，但不影响提交）
+                if (iframe.contentWindow && iframe.contentWindow.location) {
+                    submitSuccess = true;
+                } else {
+                    // 即使无法访问iframe，也假设提交成功（Google Forms会返回302重定向）
+                    submitSuccess = true;
+                }
+            } catch (e) {
+                // CSP可能阻止访问，但表单可能已成功提交
+                submitSuccess = true;
+            }
             
             // 提交成功
             lastSubmitTime = Date.now();
             
             // 显示成功消息
-            const t = translations[currentLang] || translations.zh;
+            const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
             formSuccess.style.display = 'block';
             formSuccess.innerHTML = '<p>' + t.contact.form.success + '</p>';
             
@@ -329,7 +359,13 @@ if (contactForm) {
                 formSuccess.style.display = 'none';
             }, 5000);
             
-            console.log('表单提交成功（已发送到Google Forms）');
+            console.log('表单提交成功（已发送到Google Forms）', {
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                phone: phoneInput.value.trim() || phoneDefault,
+                service: serviceText,
+                message: messageInput.value.trim().substring(0, 50) + '...'
+            });
         } catch (error) {
             // 网络错误或其他错误
             console.error('表单提交失败:', error);

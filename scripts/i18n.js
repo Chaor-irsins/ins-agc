@@ -67,7 +67,7 @@ const translations = {
                     '理赔协助'
                 ],
                 home: [
-                    'Homeowner & Rental Properties',
+                    '自住房，出租房',
                     '全面保障方案',
                     '快速理赔服务',
                     '24小时专业咨询'
@@ -184,7 +184,7 @@ const translations = {
                     'Claims Assistance'
                 ],
                 home: [
-                    'Owner-Occupied & Rental Properties',
+                    'Homeowner & Rental Properties',
                     'Comprehensive Coverage Plans',
                     'Fast Claims Service',
                     '24/7 Professional Consultation'

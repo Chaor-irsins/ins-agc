@@ -365,7 +365,10 @@ function updateServicesSection(t) {
     const businessCard = document.querySelector('.service-card-featured');
     if (businessCard) {
         const businessTitle = businessCard.querySelector('h3');
-        const businessDesc = businessCard.querySelector('> p');
+        // 修复：使用正确的选择器，找到直接子元素p（在service-card-header之后）
+        const businessDesc = businessCard.querySelector('.service-card-header + p') || 
+                            Array.from(businessCard.querySelectorAll('p')).find(p => 
+                                p.parentElement === businessCard && !p.querySelector('.service-features'));
         const businessFeatures = businessCard.querySelectorAll('.service-features li');
         if (businessTitle) businessTitle.textContent = t.services.businessInsurance;
         if (businessDesc) businessDesc.textContent = t.services.businessInsuranceDesc;
@@ -376,44 +379,38 @@ function updateServicesSection(t) {
         });
     }
     
-    // 更新汽车保险
-    const carCard = document.querySelector('.service-card:has(.service-icon:contains("🚗"))') || 
-                    Array.from(document.querySelectorAll('.service-card')).find(card => 
-                        card.querySelector('.service-icon')?.textContent.includes('🚗'));
-    if (!carCard) {
-        const cards = document.querySelectorAll('.services-row .service-card');
-        if (cards.length >= 1) {
-            const carTitle = cards[0].querySelector('h3');
-            const carDesc = cards[0].querySelector('> p');
-            const carFeatures = cards[0].querySelectorAll('.service-features li');
-            if (carTitle) carTitle.textContent = t.services.carInsurance;
-            if (carDesc) carDesc.textContent = t.services.carInsuranceDesc;
-            carFeatures.forEach((li, index) => {
-                if (t.services.features.car[index]) {
-                    li.textContent = t.services.features.car[index];
-                }
-            });
-        }
+    // 更新汽车保险和房屋保险
+    const cards = document.querySelectorAll('.services-row .service-card');
+    if (cards.length >= 1) {
+        // 汽车保险（第一个卡片）
+        const carTitle = cards[0].querySelector('h3');
+        const carDesc = cards[0].querySelector('.service-card-header + p') || 
+                       Array.from(cards[0].querySelectorAll('p')).find(p => 
+                           p.parentElement === cards[0] && !p.querySelector('.service-features'));
+        const carFeatures = cards[0].querySelectorAll('.service-features li');
+        if (carTitle) carTitle.textContent = t.services.carInsurance;
+        if (carDesc) carDesc.textContent = t.services.carInsuranceDesc;
+        carFeatures.forEach((li, index) => {
+            if (t.services.features.car[index]) {
+                li.textContent = t.services.features.car[index];
+            }
+        });
     }
     
-    // 更新房屋保险
-    const homeCard = document.querySelector('.service-card:has(.service-icon:contains("🏠"))') || 
-                     Array.from(document.querySelectorAll('.service-card')).find(card => 
-                         card.querySelector('.service-icon')?.textContent.includes('🏠'));
-    if (!homeCard) {
-        const cards = document.querySelectorAll('.services-row .service-card');
-        if (cards.length >= 2) {
-            const homeTitle = cards[1].querySelector('h3');
-            const homeDesc = cards[1].querySelector('> p');
-            const homeFeatures = cards[1].querySelectorAll('.service-features li');
-            if (homeTitle) homeTitle.textContent = t.services.homeInsurance;
-            if (homeDesc) homeDesc.textContent = t.services.homeInsuranceDesc;
-            homeFeatures.forEach((li, index) => {
-                if (t.services.features.home[index]) {
-                    li.textContent = t.services.features.home[index];
-                }
-            });
-        }
+    if (cards.length >= 2) {
+        // 房屋保险（第二个卡片）
+        const homeTitle = cards[1].querySelector('h3');
+        const homeDesc = cards[1].querySelector('.service-card-header + p') || 
+                        Array.from(cards[1].querySelectorAll('p')).find(p => 
+                            p.parentElement === cards[1] && !p.querySelector('.service-features'));
+        const homeFeatures = cards[1].querySelectorAll('.service-features li');
+        if (homeTitle) homeTitle.textContent = t.services.homeInsurance;
+        if (homeDesc) homeDesc.textContent = t.services.homeInsuranceDesc;
+        homeFeatures.forEach((li, index) => {
+            if (t.services.features.home[index]) {
+                li.textContent = t.services.features.home[index];
+            }
+        });
     }
 }
 

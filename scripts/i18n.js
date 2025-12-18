@@ -458,15 +458,29 @@ function updateContactSection(t) {
     if (sectionSubtitle) sectionSubtitle.textContent = t.contact.subtitle;
     
     // 更新联系信息
-    const contactItems = document.querySelectorAll('.contact-item h3');
-    contactItems.forEach((h3, index) => {
-        const icon = h3.previousElementSibling;
-        if (icon && icon.classList.contains('contact-icon')) {
-            const iconText = icon.textContent;
-            if (iconText === '📍') h3.textContent = t.contact.address;
-            else if (iconText === '📞') h3.textContent = t.contact.phone;
-            else if (iconText === '📧') h3.textContent = t.contact.email;
-            else if (iconText === '🕒') h3.textContent = t.contact.hours;
+    const contactItems = document.querySelectorAll('.contact-item');
+    contactItems.forEach((item) => {
+        const icon = item.querySelector('.contact-icon');
+        const h3 = item.querySelector('.contact-details h3');
+        const p = item.querySelector('.contact-details p');
+        
+        if (icon && h3) {
+            const iconText = icon.textContent.trim();
+            if (iconText === '📍') {
+                h3.textContent = t.contact.address;
+                if (p && (p.textContent.includes('请填写') || p.textContent.includes('Please'))) {
+                    p.textContent = t.contact.addressValue;
+                }
+            } else if (iconText === '📞') {
+                h3.textContent = t.contact.phone;
+            } else if (iconText === '📧') {
+                h3.textContent = t.contact.email;
+            } else if (iconText === '🕒') {
+                h3.textContent = t.contact.hours;
+                if (p && (p.textContent.includes('周一') || p.textContent.includes('Monday'))) {
+                    p.textContent = t.contact.hoursValue;
+                }
+            }
         }
     });
     

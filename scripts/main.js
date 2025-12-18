@@ -182,47 +182,66 @@ if (contactForm) {
         messageError.textContent = '';
         formSuccess.style.display = 'none';
         
+        // 重新获取表单元素（防止语言切换后引用失效）
+        const currentNameInput = document.getElementById('name');
+        const currentEmailInput = document.getElementById('email');
+        const currentPhoneInput = document.getElementById('phone');
+        const currentMessageInput = document.getElementById('message');
+        
         // 验证所有字段
-        const nameErrorMsg = validateName(nameInput.value);
-        const emailErrorMsg = validateEmail(emailInput.value);
-        const phoneErrorMsg = validatePhone(phoneInput.value);
-        const messageErrorMsg = validateMessage(messageInput.value);
+        const nameValue = currentNameInput ? currentNameInput.value.trim() : '';
+        const emailValue = currentEmailInput ? currentEmailInput.value.trim() : '';
+        const phoneValue = currentPhoneInput ? currentPhoneInput.value.trim() : '';
+        const messageValue = currentMessageInput ? currentMessageInput.value.trim() : '';
+        
+        const nameErrorMsg = validateName(nameValue);
+        const emailErrorMsg = validateEmail(emailValue);
+        const phoneErrorMsg = validatePhone(phoneValue);
+        const messageErrorMsg = validateMessage(messageValue);
         
         let hasError = false;
         
         if (nameErrorMsg) {
             nameError.textContent = nameErrorMsg;
-            nameInput.style.borderColor = '#ef4444';
+            if (currentNameInput) currentNameInput.style.borderColor = '#ef4444';
             hasError = true;
         } else {
-            nameInput.style.borderColor = '';
+            if (currentNameInput) currentNameInput.style.borderColor = '';
         }
         
         if (emailErrorMsg) {
             emailError.textContent = emailErrorMsg;
-            emailInput.style.borderColor = '#ef4444';
+            if (currentEmailInput) currentEmailInput.style.borderColor = '#ef4444';
             hasError = true;
         } else {
-            emailInput.style.borderColor = '';
+            if (currentEmailInput) currentEmailInput.style.borderColor = '';
         }
         
         if (phoneErrorMsg) {
             phoneError.textContent = phoneErrorMsg;
-            phoneInput.style.borderColor = '#ef4444';
+            if (currentPhoneInput) currentPhoneInput.style.borderColor = '#ef4444';
             hasError = true;
         } else {
-            phoneInput.style.borderColor = '';
+            if (currentPhoneInput) currentPhoneInput.style.borderColor = '';
         }
         
         if (messageErrorMsg) {
             messageError.textContent = messageErrorMsg;
-            messageInput.style.borderColor = '#ef4444';
+            if (currentMessageInput) currentMessageInput.style.borderColor = '#ef4444';
             hasError = true;
         } else {
-            messageInput.style.borderColor = '';
+            if (currentMessageInput) currentMessageInput.style.borderColor = '';
         }
         
         if (hasError) {
+            // 恢复按钮状态
+            if (submitButton) {
+                const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
+                submitButton.disabled = false;
+                submitButton.textContent = t.contact.form.submit;
+                submitButton.style.opacity = '1';
+                submitButton.style.cursor = 'pointer';
+            }
             // 滚动到第一个错误字段
             const firstError = document.querySelector('.error-message:not(:empty)');
             if (firstError) {
@@ -254,12 +273,13 @@ if (contactForm) {
         const phoneDefault = currentLang === 'zh' ? '未填写' : 'Not provided';
         
         // 准备Google Forms数据（使用URL编码格式）
+        // 使用重新获取的值，确保数据正确
         const params = new URLSearchParams();
-        params.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
-        params.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
-        params.append(GOOGLE_FORM_ENTRIES.phone, phoneInput.value.trim() || phoneDefault);
+        params.append(GOOGLE_FORM_ENTRIES.name, nameValue);
+        params.append(GOOGLE_FORM_ENTRIES.email, emailValue);
+        params.append(GOOGLE_FORM_ENTRIES.phone, phoneValue || phoneDefault);
         params.append(GOOGLE_FORM_ENTRIES.service, serviceText);
-        params.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
+        params.append(GOOGLE_FORM_ENTRIES.message, messageValue);
         
         try {
             // 使用隐藏的iframe提交到Google Forms（避免403错误）
@@ -289,13 +309,13 @@ if (contactForm) {
                 if (key === 'service') {
                     input.value = serviceText;
                 } else if (key === 'name') {
-                    input.value = nameInput.value.trim();
+                    input.value = nameValue;
                 } else if (key === 'email') {
-                    input.value = emailInput.value.trim();
+                    input.value = emailValue;
                 } else if (key === 'phone') {
-                    input.value = phoneInput.value.trim() || phoneDefault;
+                    input.value = phoneValue || phoneDefault;
                 } else if (key === 'message') {
-                    input.value = messageInput.value.trim();
+                    input.value = messageValue;
                 }
                 hiddenForm.appendChild(input);
             });
@@ -360,11 +380,11 @@ if (contactForm) {
             }, 5000);
             
             console.log('表单提交成功（已发送到Google Forms）', {
-                name: nameInput.value.trim(),
-                email: emailInput.value.trim(),
-                phone: phoneInput.value.trim() || phoneDefault,
+                name: nameValue,
+                email: emailValue,
+                phone: phoneValue || phoneDefault,
                 service: serviceText,
-                message: messageInput.value.trim().substring(0, 50) + '...'
+                message: messageValue.substring(0, 50) + (messageValue.length > 50 ? '...' : '')
             });
         } catch (error) {
             // 网络错误或其他错误

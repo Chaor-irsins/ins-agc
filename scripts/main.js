@@ -236,7 +236,7 @@ if (contactForm) {
         const serviceSelect = document.getElementById('service');
         const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text || '其他';
         
-        // 准备Google Forms数据（使用URL编码格式，避免401错误）
+        // 准备Google Forms数据（使用URL编码格式）
         const params = new URLSearchParams();
         params.append(GOOGLE_FORM_ENTRIES.name, nameInput.value.trim());
         params.append(GOOGLE_FORM_ENTRIES.email, emailInput.value.trim());
@@ -245,23 +245,55 @@ if (contactForm) {
         params.append(GOOGLE_FORM_ENTRIES.message, messageInput.value.trim());
         
         try {
-            // 提交到Google Forms
-            // 使用URL编码方式提交，避免401错误
-            const response = await fetch(GOOGLE_FORM_URL, {
-                method: 'POST',
-                mode: 'no-cors',  // Google Forms需要no-cors模式
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: params.toString()
+            // 使用隐藏的iframe提交到Google Forms（避免401错误）
+            const formUrl = GOOGLE_FORM_URL + '?' + params.toString();
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            iframe.name = 'hidden_iframe_' + Date.now();
+            document.body.appendChild(iframe);
+            
+            // 创建隐藏表单并提交
+            const hiddenForm = document.createElement('form');
+            hiddenForm.method = 'POST';
+            hiddenForm.action = GOOGLE_FORM_URL;
+            hiddenForm.target = iframe.name;
+            hiddenForm.style.display = 'none';
+            
+            // 添加所有字段
+            Object.keys(GOOGLE_FORM_ENTRIES).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = GOOGLE_FORM_ENTRIES[key];
+                if (key === 'service') {
+                    input.value = serviceText;
+                } else if (key === 'name') {
+                    input.value = nameInput.value.trim();
+                } else if (key === 'email') {
+                    input.value = emailInput.value.trim();
+                } else if (key === 'phone') {
+                    input.value = phoneInput.value.trim() || '未填写';
+                } else if (key === 'message') {
+                    input.value = messageInput.value.trim();
+                }
+                hiddenForm.appendChild(input);
             });
             
-            // 由于使用no-cors模式，无法检查response状态
-            // 但提交应该已经成功（Google Forms会自动处理）
-            // 等待一小段时间确保提交完成
-            await new Promise(resolve => setTimeout(resolve, 500));
+            document.body.appendChild(hiddenForm);
+            hiddenForm.submit();
             
-            // 提交成功（假设成功，因为no-cors无法检查状态）
+            // 等待提交完成
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(hiddenForm);
+                document.body.removeChild(iframe);
+            }, 2000);
+            
+            // 提交成功
             lastSubmitTime = Date.now();
             
             // 显示成功消息

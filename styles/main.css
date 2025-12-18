@@ -681,7 +681,7 @@ section {
 
 .service-card {
     background-color: var(--bg-white);
-    padding: 2.5rem;
+    padding: 1.5rem;
     border-radius: 16px;
     box-shadow: var(--shadow-md);
     transition: var(--transition-slow);
@@ -711,21 +711,32 @@ section {
     border-color: var(--primary-light);
 }
 
-.service-icon {
-    font-size: 3rem;
+/* 服务卡片头部：图标和标题在同一行 */
+.service-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 1rem;
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    line-height: 1;
 }
 
 .service-card h3 {
     font-size: 1.5rem;
     color: var(--text-dark);
-    margin-bottom: 1rem;
+    margin: 0;
+    flex: 1;
 }
 
 .service-card > p {
     color: var(--text-light);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
 .service-features {

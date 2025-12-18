@@ -56,10 +56,11 @@ const phoneError = document.getElementById('phoneError');
 const messageError = document.getElementById('messageError');
 const formSuccess = document.getElementById('formSuccess');
 
-// 验证函数
+// 验证函数（支持多语言）
 function validateName(name) {
     if (name.trim().length < 2) {
-        return '姓名至少需要2个字符';
+        const t = translations[currentLang] || translations.zh;
+        return t.contact.form.nameRequired;
     }
     return '';
 }
@@ -67,7 +68,8 @@ function validateName(name) {
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        return '请输入有效的邮箱地址';
+        const t = translations[currentLang] || translations.zh;
+        return t.contact.form.emailRequired;
     }
     return '';
 }
@@ -76,7 +78,8 @@ function validatePhone(phone) {
     if (phone && phone.trim() !== '') {
         const phoneRegex = /^[\d\s\-\+\(\)]+$/;
         if (!phoneRegex.test(phone)) {
-            return '请输入有效的电话号码';
+            const t = translations[currentLang] || translations.zh;
+            return t.contact.form.phoneInvalid;
         }
     }
     return '';
@@ -84,7 +87,8 @@ function validatePhone(phone) {
 
 function validateMessage(message) {
     if (message.trim().length < 10) {
-        return '留言至少需要10个字符';
+        const t = translations[currentLang] || translations.zh;
+        return t.contact.form.messageRequired;
     }
     return '';
 }
@@ -155,7 +159,8 @@ const SUBMIT_COOLDOWN = 30000; // 30秒内不能重复提交（毫秒）
 
 if (contactForm) {
     const submitButton = contactForm.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton ? submitButton.textContent : '提交咨询';
+    let originalButtonText = '提交咨询';
+    // 原始按钮文本会在语言切换时更新
     
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -164,7 +169,9 @@ if (contactForm) {
         const now = Date.now();
         if (now - lastSubmitTime < SUBMIT_COOLDOWN) {
             const remainingTime = Math.ceil((SUBMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
-            alert(`请稍候再试，距离上次提交还需等待 ${remainingTime} 秒`);
+            const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
+            const message = t.contact.form.cooldown.replace('{seconds}', remainingTime);
+            alert(message);
             return;
         }
         
@@ -226,8 +233,9 @@ if (contactForm) {
         
         // 防重复提交：禁用按钮
         if (submitButton) {
+            const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
             submitButton.disabled = true;
-            submitButton.textContent = '提交中...';
+            submitButton.textContent = t.contact.form.submitting;
             submitButton.style.opacity = '0.6';
             submitButton.style.cursor = 'not-allowed';
         }
@@ -306,8 +314,9 @@ if (contactForm) {
             lastSubmitTime = Date.now();
             
             // 显示成功消息
+            const t = translations[currentLang] || translations.zh;
             formSuccess.style.display = 'block';
-            formSuccess.innerHTML = '<p>✓ 感谢您的咨询！我们会尽快与您联系。</p>';
+            formSuccess.innerHTML = '<p>' + t.contact.form.success + '</p>';
             
             // 重置表单
             contactForm.reset();
@@ -326,8 +335,9 @@ if (contactForm) {
             console.error('表单提交失败:', error);
             
             // 显示错误消息
+            const t = translations[currentLang] || translations.zh;
             formSuccess.style.display = 'block';
-            formSuccess.innerHTML = '<p style="color: #ef4444;">✗ 提交失败，请检查网络连接后重试。如果问题持续，请直接致电联系我们。</p>';
+            formSuccess.innerHTML = '<p style="color: #ef4444;">' + t.contact.form.error + '</p>';
             
             formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
@@ -338,8 +348,9 @@ if (contactForm) {
         } finally {
             // 恢复按钮状态
             if (submitButton) {
+                const t = typeof translations !== 'undefined' && translations[currentLang] ? translations[currentLang] : translations.zh;
                 submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
+                submitButton.textContent = t.contact.form.submit;
                 submitButton.style.opacity = '1';
                 submitButton.style.cursor = 'pointer';
             }

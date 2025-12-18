@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="专业的保险代理服务，为您提供车险、房屋险、商业保险等全方位保险解决方案">
     <meta name="keywords" content="保险,保险代理,车险,房屋险,商业保险,保险咨询">
-    <title>专业保险代理服务 | Insurance Agency</title>
+    <title id="pageTitle">诚信保险代理公司 | Integrity Risk Solutions LLC</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
                     <!-- <img src="assets/images/logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;"> -->
                     <img src="assets/images/Logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
-                <h2>诚信保险代理公司</h2>
+                <h2 id="companyName">诚信保险代理公司</h2>
             </div>
             <button class="nav-toggle" id="navToggle" aria-label="切换菜单">
                 <span></span>
@@ -26,11 +26,15 @@
                 <span></span>
             </button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#home" class="nav-link">首页</a></li>
-                <li><a href="#about" class="nav-link">关于我们</a></li>
-                <li><a href="#services" class="nav-link">服务介绍</a></li>
-                <li><a href="#contact" class="nav-link">联系方式</a></li>
+                <li><a href="#home" class="nav-link" data-i18n="nav.home">首页</a></li>
+                <li><a href="#about" class="nav-link" data-i18n="nav.about">关于我们</a></li>
+                <li><a href="#services" class="nav-link" data-i18n="nav.services">服务介绍</a></li>
+                <li><a href="#contact" class="nav-link" data-i18n="nav.contact">联系方式</a></li>
             </ul>
+            <div class="language-switcher">
+                <button class="lang-btn active" id="langZh" data-lang="zh">中文</button>
+                <button class="lang-btn" id="langEn" data-lang="en">EN</button>
+            </div>
         </div>
     </nav>
 
@@ -51,11 +55,11 @@
         <div class="hero-hexagon hero-hexagon-2"></div>
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">专业的保险代理服务</h1>
-                <p class="hero-subtitle">为您和您的家人,以及您的企业提供全方位的保险保障方案</p>
+                <h1 class="hero-title" data-i18n="hero.title">专业的保险代理服务</h1>
+                <p class="hero-subtitle" data-i18n="hero.subtitle">为您和您的家人,以及您的企业提供全方位的保险保障方案</p>
                 <div class="hero-buttons">
-                    <a href="#services" class="btn btn-primary">了解服务</a>
-                    <a href="#contact" class="btn btn-secondary">联系我们</a>
+                    <a href="#services" class="btn btn-primary" data-i18n="hero.btnServices">了解服务</a>
+                    <a href="#contact" class="btn btn-secondary" data-i18n="hero.btnContact">联系我们</a>
                 </div>
             </div>
         </div>
@@ -65,8 +69,8 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">关于我们</h2>
-                <p class="section-subtitle">值得信赖的保险合作伙伴</p>
+                <h2 class="section-title" data-i18n="about.title">关于我们</h2>
+                <p class="section-subtitle" data-i18n="about.subtitle">值得信赖的保险合作伙伴</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
@@ -105,8 +109,8 @@
     <section id="services" class="services">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">服务介绍</h2>
-                <p class="section-subtitle">全方位的保险解决方案</p>
+                <h2 class="section-title" data-i18n="services.title">服务介绍</h2>
+                <p class="section-subtitle" data-i18n="services.subtitle">全方位的保险解决方案</p>
             </div>
             <div class="services-grid">
                 <!-- 商业保险 - 单独占一排 -->
@@ -161,8 +165,8 @@
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">联系方式</h2>
-                <p class="section-subtitle">我们随时为您服务</p>
+                <h2 class="section-title" data-i18n="contact.title">联系方式</h2>
+                <p class="section-subtitle" data-i18n="contact.subtitle">我们随时为您服务</p>
             </div>
             <div class="contact-content">
                 <div class="contact-info">
@@ -198,36 +202,36 @@
                 <div class="contact-form-wrapper">
                     <form class="contact-form" id="contactForm">
                         <div class="form-group">
-                            <label for="name">姓名 *</label>
+                            <label for="name" data-i18n="contact.form.name">姓名 *</label>
                             <input type="text" id="name" name="name" required>
                             <span class="error-message" id="nameError"></span>
                         </div>
                         <div class="form-group">
-                            <label for="email">邮箱 *</label>
+                            <label for="email" data-i18n="contact.form.email">邮箱 *</label>
                             <input type="email" id="email" name="email" required>
                             <span class="error-message" id="emailError"></span>
                         </div>
                         <div class="form-group">
-                            <label for="phone">电话</label>
+                            <label for="phone" data-i18n="contact.form.phone">电话</label>
                             <input type="tel" id="phone" name="phone">
                             <span class="error-message" id="phoneError"></span>
                         </div>
                         <div class="form-group">
-                            <label for="service">咨询类型</label>
+                            <label for="service" data-i18n="contact.form.service">咨询类型</label>
                             <select id="service" name="service">
-                                <option value="">请选择</option>
-                                <option value="car">汽车保险</option>
-                                <option value="property">房屋保险</option>
-                                <option value="business">商业保险</option>
-                                <option value="other">其他</option>
+                                <option value="" data-i18n="contact.form.servicePlaceholder">请选择</option>
+                                <option value="car" data-i18n="contact.form.serviceCar">汽车保险</option>
+                                <option value="property" data-i18n="contact.form.serviceProperty">房屋保险</option>
+                                <option value="business" data-i18n="contact.form.serviceBusiness">商业保险</option>
+                                <option value="other" data-i18n="contact.form.serviceOther">其他</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="message">留言 *</label>
+                            <label for="message" data-i18n="contact.form.message">留言 *</label>
                             <textarea id="message" name="message" rows="5" required></textarea>
                             <span class="error-message" id="messageError"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">提交咨询</button>
+                        <button type="submit" class="btn btn-primary btn-block" data-i18n="contact.form.submit">提交咨询</button>
                         <div class="form-success" id="formSuccess" style="display: none;">
                             <p>✓ 感谢您的咨询！我们会尽快与您联系。</p>
                         </div>
@@ -243,32 +247,33 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Insurance Agency</h3>
-                    <p>专业的保险代理服务，为您的未来保驾护航。</p>
+                    <p data-i18n="footer.tagline">专业的保险代理服务，为您的未来保驾护航。</p>
                 </div>
                 <div class="footer-section">
-                    <h4>快速链接</h4>
+                    <h4 data-i18n="footer.quickLinks">快速链接</h4>
                     <ul>
-                        <li><a href="#home">首页</a></li>
-                        <li><a href="#about">关于我们</a></li>
-                        <li><a href="#services">服务介绍</a></li>
-                        <li><a href="#contact">联系方式</a></li>
+                        <li><a href="#home" data-i18n="nav.home">首页</a></li>
+                        <li><a href="#about" data-i18n="nav.about">关于我们</a></li>
+                        <li><a href="#services" data-i18n="nav.services">服务介绍</a></li>
+                        <li><a href="#contact" data-i18n="nav.contact">联系方式</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>服务项目</h4>
+                    <h4 data-i18n="footer.services">服务项目</h4>
                     <ul>
-                        <li><a href="#services">商业保险</a></li>
-                        <li><a href="#services">汽车保险</a></li>
-                        <li><a href="#services">房屋保险</a></li>
+                        <li><a href="#services" data-i18n="services.businessInsurance">商业保险</a></li>
+                        <li><a href="#services" data-i18n="services.carInsurance">汽车保险</a></li>
+                        <li><a href="#services" data-i18n="services.homeInsurance">房屋保险</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Integrity Risk Solutions LLC. 保留所有权利。</p>
+                <p data-i18n="footer.copyright">&copy; 2025 Integrity Risk Solutions LLC. 保留所有权利。</p>
             </div>
         </div>
     </footer>
 
+    <script src="scripts/i18n.js"></script>
     <script src="scripts/main.js"></script>
 </body>
 </html>

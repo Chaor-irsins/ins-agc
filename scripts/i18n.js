@@ -144,7 +144,13 @@ const translations = {
             title: 'About Us',
             subtitle: 'Your Trusted Insurance Partner',
             heading: 'About Us',
-            intro: 'We are a professional insurance agency dedicated to providing the most professional and reliable insurance services to our clients. With years of industry experience and a professional team, we specialize in commercial insurance, auto insurance, and home insurance, helping clients find the most suitable insurance solutions.',
+            intro: 'Integrity Risk Solutions is a Georgia-based independent insurance agency focused on delivering practical, reliable protection for individuals, families, and businesses.
+
+We specialize in commercial insurance and personal auto & home coverage, helping business owners manage operational risk and assisting families in protecting what matters most. Our services include General Liability, Commercial Property, Business Auto, Workers Compensation, Umbrella, as well as Personal Auto and Homeowners policies.
+
+Our mission is to provide clear guidance, competitive coverage options, and long-term risk management strategies tailored to each client’s situation. We work closely with multiple carriers to design solutions that align with your budget, exposure, and growth plans.
+
+At Integrity Risk Solutions, we prioritize responsiveness, transparency, and integrity in every interaction. We aim to build lasting relationships by delivering dependable service and straightforward advice—so our clients can focus on running their businesses and living their lives with confidence.',
             servicesTitle: 'Our Services',
             businessInsurance: 'Commercial Insurance',
             businessInsuranceDesc: 'We provide comprehensive commercial insurance solutions for various businesses, covering industries such as food service, retail, professional services, logistics, and construction. We understand the unique risk characteristics of different industries and tailor the most suitable coverage plans for businesses.',
@@ -571,5 +577,6 @@ if (document.readyState === 'loading') {
     // DOM已经加载完成，立即执行
     initLanguage();
 }
+
 
 

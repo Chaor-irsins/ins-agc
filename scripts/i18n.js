@@ -259,7 +259,7 @@ function updatePageLanguage() {
     const t = translations[currentLang];
     
     // 更新页面标题
-    document.getElementById('pageTitle').textContent = t.pageTitle;
+    document.title = t.pageTitle;
     document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
     
     // 更新所有带有data-i18n属性的元素
@@ -326,37 +326,38 @@ function updateAboutSection(t) {
     const aboutHeading = document.querySelector('#about .about-text h3:first-child');
     if (aboutHeading) aboutHeading.textContent = t.about.heading;
     
+    // 更新关于我们介绍段落
     const aboutTexts = document.querySelectorAll('#about .about-text p');
     if (aboutTexts.length >= 1) {
+        // 第一个段落是介绍，需要保留换行符
         aboutTexts[0].textContent = t.about.intro;
     }
     
     // 更新"我们的服务范围"标题 - 查找所有h3，找到包含"服务范围"的那个
     const allH3 = document.querySelectorAll('#about .about-text h3');
     allH3.forEach(h3 => {
-        if (h3.textContent.includes('服务范围') || h3.textContent.includes('Services')) {
+        const h3Text = h3.textContent.trim();
+        if (h3Text.includes('服务范围') || h3Text.includes('Services') || h3Text === t.about.servicesTitle) {
             h3.textContent = t.about.servicesTitle;
         }
     });
     
-    // 更新服务范围描述
-    const serviceDescriptions = document.querySelectorAll('#about .about-text p strong');
-    if (serviceDescriptions.length >= 3) {
-        serviceDescriptions[0].textContent = t.about.businessInsurance + ' - ';
-        serviceDescriptions[1].textContent = t.about.carInsurance + ' - ';
-        serviceDescriptions[2].textContent = t.about.homeInsurance + ' - ';
-    }
-    
+    // 更新服务范围描述（优化：避免重复查询）
     const serviceParas = document.querySelectorAll('#about .about-text p');
     if (serviceParas.length >= 4) {
+        // 第一个段落是intro，跳过
+        // 第二个段落是商业保险
         serviceParas[1].innerHTML = '<strong>' + t.about.businessInsurance + ' - </strong>' + t.about.businessInsuranceDesc;
+        // 第三个段落是汽车保险
         serviceParas[2].innerHTML = '<strong>' + t.about.carInsurance + ' - </strong>' + t.about.carInsuranceDesc;
+        // 第四个段落是房屋保险
         serviceParas[3].innerHTML = '<strong>' + t.about.homeInsurance + ' - </strong>' + t.about.homeInsuranceDesc;
     }
     
     // 更新"为什么选择我们"标题 - 使用之前获取的allH3
     allH3.forEach(h3 => {
-        if (h3.textContent.includes('为什么') || h3.textContent.includes('Why')) {
+        const h3Text = h3.textContent.trim();
+        if (h3Text.includes('为什么') || h3Text.includes('Why') || h3Text === t.about.whyTitle) {
             h3.textContent = t.about.whyTitle;
         }
     });
@@ -522,17 +523,22 @@ function updateContactSection(t) {
 
 // 更新页脚
 function updateFooter(t) {
-    const footerTagline = document.querySelector('.footer-section p');
+    // 页脚标签行（第一个footer-section的p标签）
+    const footerTagline = document.querySelector('.footer-section:first-child p');
     if (footerTagline) footerTagline.textContent = t.footer.tagline;
     
-    const quickLinks = document.querySelector('.footer-section h4');
-    if (quickLinks && quickLinks.nextElementSibling) {
-        const nextH4 = quickLinks.nextElementSibling;
-        if (nextH4.tagName === 'H4') {
-            nextH4.textContent = t.footer.services;
-        }
+    // 页脚标题（所有h4标签，通过data-i18n属性更新）
+    // 注意：页脚的h4标签已经有data-i18n属性，会通过updatePageLanguage中的通用更新逻辑处理
+    // 这里只需要确保快速链接和服务项目的标题正确更新
+    const footerH4s = document.querySelectorAll('.footer-section h4');
+    if (footerH4s.length >= 2) {
+        // 第一个h4是"快速链接"
+        footerH4s[0].textContent = t.footer.quickLinks;
+        // 第二个h4是"服务项目"
+        footerH4s[1].textContent = t.footer.services;
     }
     
+    // 版权信息
     const copyright = document.querySelector('.footer-bottom p');
     if (copyright) copyright.textContent = t.footer.copyright;
 }

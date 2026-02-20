@@ -16,6 +16,7 @@ const translations = {
         hero: {
             title: '专业的保险代理服务',
             subtitle: '为您和您的家人,以及您的企业提供全方位的保险保障方案',
+            license: '许可经营州：GA, AL, FL, SC, NC, TX, VA, KY, PA, CA 及其他州',
             btnServices: '了解服务',
             btnContact: '联系我们'
         },
@@ -133,6 +134,7 @@ const translations = {
         hero: {
             title: 'Professional Insurance Agency Services',
             subtitle: 'Comprehensive insurance solutions for you, your family, and your business',
+            license: 'Licensed in GA, AL, FL, SC, NC, TX, VA, KY, PA, CA & Additional States',
             btnServices: 'Our Services',
             btnContact: 'Contact Us'
         },
@@ -287,8 +289,10 @@ function updatePageLanguage() {
     // 更新Hero部分
     const heroTitle = document.querySelector('.hero-title');
     const heroSubtitle = document.querySelector('.hero-subtitle');
+    const heroLicense = document.querySelector('.hero-license');
     if (heroTitle) heroTitle.textContent = t.hero.title;
     if (heroSubtitle) heroSubtitle.textContent = t.hero.subtitle;
+    if (heroLicense) heroLicense.textContent = t.hero.license;
     
     const btnServices = document.querySelector('.hero-buttons .btn-primary');
     const btnContact = document.querySelector('.hero-buttons .btn-secondary');

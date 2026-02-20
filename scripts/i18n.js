@@ -25,9 +25,7 @@ const translations = {
             title: '关于我们',
             subtitle: '值得信赖的保险合作伙伴',
             heading: '关于我们',
-            intro: 'Integrity Risk Solutions 是一家位于乔治亚州的独立保险代理公司，致力于为个人、家庭及企业提供务实、可靠的风险保障方案。
-                我们专注于商业保险以及个人车险和房屋保险，协助企业主有效管理经营风险，同时帮助家庭守护最重要的资产与生活保障。
-                我们的服务范围包括商业综合责任险（General Liability）、商业财产险（Commercial Property）、商业车险（Business Auto）、工伤保险（WorkersCompensation）、伞式保险（Umbrella），以及个人车险和房屋保险等。我们的使命是为每一位客户提供清晰透明的保障建议、具有竞争力的保险方案，以及符合实际需求的长期风险管理规划。通过与多家保险公司合作，我们能够根据客户的预算、风险敞口及发展目标，量身定制合适的保障结构。在诚信保险代理公司，我们始终坚持专业、高效与诚信的服务原则。我们重视与客户建立长期合作关系，以稳定、直接、负责任的态度提供支持，让客户能够专注于事业发展与生活规划，无后顾之忧。',
+            intro: 'Integrity Risk Solutions 是一家位于乔治亚州的独立保险代理公司，致力于为个人、家庭及企业提供务实、可靠的风险保障方案。我们专注于商业保险以及个人车险和房屋保险，协助企业主有效管理经营风险，同时帮助家庭守护最重要的资产与生活保障。我们的服务范围包括商业综合责任险（General Liability）、商业财产险（Commercial Property）、商业车险（Business Auto）、工伤保险（WorkersCompensation）、伞式保险（Umbrella），以及个人车险和房屋保险等。我们的使命是为每一位客户提供清晰透明的保障建议、具有竞争力的保险方案，以及符合实际需求的长期风险管理规划。通过与多家保险公司合作，我们能够根据客户的预算、风险敞口及发展目标，量身定制合适的保障结构。在诚信保险代理公司，我们始终坚持专业、高效与诚信的服务原则。我们重视与客户建立长期合作关系，以稳定、直接、负责任的态度提供支持，让客户能够专注于事业发展与生活规划，无后顾之忧。',
             servicesTitle: '我们的服务范围',
             businessInsurance: '商业保险',
             businessInsuranceDesc: '为各类企业提供全面的商业保险解决方案，涵盖餐饮、零售、服务、物流、建筑等多个行业。我们深入了解不同行业的风险特点，为企业量身定制最合适的保障方案。',
@@ -144,13 +142,7 @@ const translations = {
             title: 'About Us',
             subtitle: 'Your Trusted Insurance Partner',
             heading: 'About Us',
-            intro: 'Integrity Risk Solutions is a Georgia-based independent insurance agency focused on delivering practical, reliable protection for individuals, families, and businesses.
-
-We specialize in commercial insurance and personal auto & home coverage, helping business owners manage operational risk and assisting families in protecting what matters most. Our services include General Liability, Commercial Property, Business Auto, Workers Compensation, Umbrella, as well as Personal Auto and Homeowners policies.
-
-Our mission is to provide clear guidance, competitive coverage options, and long-term risk management strategies tailored to each client’s situation. We work closely with multiple carriers to design solutions that align with your budget, exposure, and growth plans.
-
-At Integrity Risk Solutions, we prioritize responsiveness, transparency, and integrity in every interaction. We aim to build lasting relationships by delivering dependable service and straightforward advice—so our clients can focus on running their businesses and living their lives with confidence.',
+            intro: 'Integrity Risk Solutions is a Georgia-based independent insurance agency focused on delivering practical, reliable protection for individuals, families, and businesses.\n\nWe specialize in commercial insurance and personal auto & home coverage, helping business owners manage operational risk and assisting families in protecting what matters most. Our services include General Liability, Commercial Property, Business Auto, Workers Compensation, Umbrella, as well as Personal Auto and Homeowners policies.\n\nOur mission is to provide clear guidance, competitive coverage options, and long-term risk management strategies tailored to each client\'s situation. We work closely with multiple carriers to design solutions that align with your budget, exposure, and growth plans.\n\nAt Integrity Risk Solutions, we prioritize responsiveness, transparency, and integrity in every interaction. We aim to build lasting relationships by delivering dependable service and straightforward advice—so our clients can focus on running their businesses and living their lives with confidence.',
             servicesTitle: 'Our Services',
             businessInsurance: 'Commercial Insurance',
             businessInsuranceDesc: 'We provide comprehensive commercial insurance solutions for various businesses, covering industries such as food service, retail, professional services, logistics, and construction. We understand the unique risk characteristics of different industries and tailor the most suitable coverage plans for businesses.',
@@ -329,8 +321,9 @@ function updateAboutSection(t) {
     // 更新关于我们介绍段落
     const aboutTexts = document.querySelectorAll('#about .about-text p');
     if (aboutTexts.length >= 1) {
-        // 第一个段落是介绍，需要保留换行符
-        aboutTexts[0].textContent = t.about.intro;
+        // 第一个段落是介绍，将换行符转换为HTML换行
+        const introText = t.about.intro.replace(/\n/g, '<br>');
+        aboutTexts[0].innerHTML = introText;
     }
     
     // 更新"我们的服务范围"标题 - 查找所有h3，找到包含"服务范围"的那个
@@ -559,21 +552,23 @@ function initLanguage() {
     updatePageLanguage();
     updateLanguageButtons();
     
-    // 语言切换按钮事件 - 使用事件委托
-    const languageSwitcher = document.querySelector('.language-switcher');
-    if (languageSwitcher) {
-        languageSwitcher.addEventListener('click', (e) => {
-            const btn = e.target.closest('.lang-btn');
-            if (btn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const lang = btn.getAttribute('data-lang');
-                if (lang && lang !== currentLang) {
-                    switchLanguage(lang);
-                }
+    // 语言切换按钮事件 - 为每个按钮单独绑定事件
+    const langButtons = document.querySelectorAll('.lang-btn');
+    langButtons.forEach(btn => {
+        // 移除可能存在的旧事件监听器（通过克隆节点）
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        // 添加新的事件监听器
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const lang = this.getAttribute('data-lang');
+            if (lang) {
+                switchLanguage(lang);
             }
         });
-    }
+    });
 }
 
 // DOMContentLoaded时初始化
